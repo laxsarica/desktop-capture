@@ -1,0 +1,16 @@
+## .NET
+bin/
+obj/
+*.user
+*.suo
+*.vs/
+
+## IDE
+.idea/
+*.DotSettings
+
+## Config (contains API keys)
+**/appsettings.json
+
+## Releases
+*.zip
