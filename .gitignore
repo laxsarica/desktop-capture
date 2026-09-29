@@ -14,3 +14,7 @@ obj/
 
 ## Releases
 *.zip
+
+## Cloudflare Worker
+node_modules/
+.wrangler/

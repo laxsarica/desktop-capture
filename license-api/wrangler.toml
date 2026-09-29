@@ -1,0 +1,8 @@
+name = "license-api"
+main = "src/index.js"
+compatibility_date = "2024-12-01"
+
+[[d1_databases]]
+binding = "DB"
+database_name = "license-db"
+database_id = "c43d00b9-9ae8-4d50-a049-b44009928d9d"

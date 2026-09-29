@@ -10,13 +10,13 @@ public partial class App : Application
 {
     public static AppSettings Settings { get; private set; } = new();
 
-    protected override void OnStartup(StartupEventArgs e)
+    protected override async void OnStartup(StartupEventArgs e)
     {
         base.OnStartup(e);
         LoadSettings();
 
         // Validate license key before allowing the app to run
-        if (!LicenseService.IsValid(Settings.LicenseKey))
+        if (!await LicenseService.IsValidAsync(Settings.LicenseKey))
         {
             MessageBox.Show(
                 "Invalid or missing License Key.\n\n" +
