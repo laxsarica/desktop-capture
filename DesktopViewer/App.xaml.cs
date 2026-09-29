@@ -2,6 +2,7 @@ using System.IO;
 using System.Windows;
 using Microsoft.Extensions.Configuration;
 using DesktopViewer.Models;
+using DesktopViewer.Services;
 
 namespace DesktopViewer;
 
@@ -13,6 +14,21 @@ public partial class App : Application
     {
         base.OnStartup(e);
         LoadSettings();
+
+        // Validate license key before allowing the app to run
+        if (!LicenseService.IsValid(Settings.LicenseKey))
+        {
+            MessageBox.Show(
+                "Invalid or missing License Key.\n\n" +
+                "Please set a valid \"LicenseKey\" in appsettings.json\n" +
+                "located next to DesktopViewer.exe and restart the app.",
+                "License Required",
+                MessageBoxButton.OK,
+                MessageBoxImage.Warning);
+
+            Shutdown();
+            return;
+        }
     }
 
     public static void LoadSettings()
@@ -28,15 +44,17 @@ public partial class App : Application
                     .AddJsonFile(configPath, optional: true, reloadOnChange: false)
                     .Build();
 
-                // Check for new schema (Settings:...) or fallback to old schema (OpenAI:ApiKey)
+                var defaultSettings = new AppSettings();
+
                 Settings = new AppSettings
                 {
-                    Provider = config["Settings:Provider"] ?? "OpenAI",
-                    OpenAiApiKey = config["Settings:OpenAiApiKey"] ?? config["OpenAI:ApiKey"] ?? "",
-                    Model = config["Settings:Model"] ?? config["OpenAI:Model"] ?? "gpt-4o",
-                    AzureEndpoint = config["Settings:AzureEndpoint"] ?? "https://viveksingh-claude-resource.services.ai.azure.com/openai/v1",
-                    AzureDeploymentName = config["Settings:AzureDeploymentName"] ?? "gpt-5.4-mini",
-                    AzureApiKey = config["Settings:AzureApiKey"] ?? ""
+                    Provider = config["Settings:Provider"] ?? defaultSettings.Provider,
+                    OpenAiApiKey = config["Settings:OpenAiApiKey"] ?? config["OpenAI:ApiKey"] ?? defaultSettings.OpenAiApiKey,
+                    Model = config["Settings:Model"] ?? config["OpenAI:Model"] ?? defaultSettings.Model,
+                    AzureEndpoint = config["Settings:AzureEndpoint"] ?? defaultSettings.AzureEndpoint,
+                    AzureDeploymentName = config["Settings:AzureDeploymentName"] ?? defaultSettings.AzureDeploymentName,
+                    AzureApiKey = config["Settings:AzureApiKey"] ?? defaultSettings.AzureApiKey,
+                    LicenseKey = config["Settings:LicenseKey"] ?? ""
                 };
             }
         }

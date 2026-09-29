@@ -9,9 +9,11 @@ public class AppSettings
     public string OpenAiApiKey { get; set; } = "";
     public string Model { get; set; } = "gpt-4o";
 
-    public string AzureEndpoint { get; set; } = "https://viveksingh-claude-resource.services.ai.azure.com/openai/v1";
-    public string AzureDeploymentName { get; set; } = "gpt-5.4-mini";
+    public string AzureEndpoint { get; set; } = "";
+    public string AzureDeploymentName { get; set; } = "";
     public string AzureApiKey { get; set; } = "";
+
+    public string LicenseKey { get; set; } = "";
 
     private static readonly string SettingsFilePath = Path.Combine(
         AppDomain.CurrentDomain.BaseDirectory, "appsettings.json");
@@ -26,7 +28,8 @@ public class AppSettings
                     Model,
                     AzureEndpoint,
                     AzureDeploymentName,
-                    AzureApiKey
+                    AzureApiKey,
+                    LicenseKey
                 } 
             },
             new System.Text.Json.JsonSerializerOptions { WriteIndented = true });
